@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Confirmation Bias — How the Mind Protects Its Beliefs</title>
+<meta name="description" content="A field guide to the most persistent bug in human thinking: why we seek evidence that confirms what we already believe, how it shapes media, medicine, politics, and what actually helps." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+/* ————————————————————————————————————————————————————————————
+   DESIGN TOKENS
+   ——————————————————————————————————————————————————————————— */
+:root {
+  --yellow: #FFD60A;
+  --yellow-soft: #FFF3B0;
+  --blue: #0033A0;
+  --blue-ink: #001D6E;
+  --blue-electric: #1E4FFF;
+  --black: #0A0A0A;
+  --black-soft: #1A1A1A;
+  --white: #FFFFFF;
+  --grey-50: #FAFAFA;
+  --grey-100: #F2F2F2;
+  --grey-200: #E5E5E5;
+  --grey-400: #9A9A9A;
+  --grey-600: #5A5A5A;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --max: 1320px;
+  --gutter: clamp(20px, 4vw, 56px);
+
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+/* ————————————————————————————————————————————————————————————
+   RESET + BASE
+   ——————————————————————————————————————————————————————————— */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  font-family: var(--font-body);
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.55;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+::selection { background: var(--yellow); color: var(--black); }
+
+/* ————————————————————————————————————————————————————————————
+   TYPOGRAPHY SYSTEM
+   ——————————————————————————————————————————————————————————— */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: ""; width: 28px; height: 1px; background: var(--blue-ink);
+}
+.eyebrow.white, .eyebrow.white::before { color: var(--yellow); background: var(--yellow); }
+.eyebrow.white::before { background: var(--yellow); }
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height: 1.02; letter-spacing: -0.02em; color: var(--black); }
+h2 { font-size: clamp(40px, 6vw, 88px); font-weight: 400; }
+h3 { font-size: clamp(24px, 2.6vw, 40px); font-weight: 500; letter-spacing: -0.015em; }
+h4 { font-size: clamp(18px, 1.4vw, 22px); font-weight: 600; font-family: var(--font-body); letter-spacing: -0.005em; }
+p { font-size: clamp(16px, 1.1vw, 18px); color: var(--black-soft); }
+p.lede { font-size: clamp(20px, 1.6vw, 26px); line-height: 1.45; color: var(--black); font-weight: 400; }
+em, i { font-style: italic; }
+strong { font-weight: 600; color: var(--black); }
+
+.italic-serif { font-family: var(--font-display); font-style: italic; font-weight: 400; }
+
+/* ————————————————————————————————————————————————————————————
+   LAYOUT
+   ——————————————————————————————————————————————————————————— */
+section { padding: clamp(80px, 10vw, 160px) 0; position: relative; }
+.container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); position: relative; }
+.container-wide { width: 100%; max-width: 1520px; margin: 0 auto; padding: 0 var(--gutter); }
+.grid { display: grid; gap: clamp(24px, 3vw, 48px); }
+.two-col { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.three-col { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.four-col { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+/* ————————————————————————————————————————————————————————————
+   NAVIGATION
+   ——————————————————————————————————————————————————————————— */
+nav.top {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px var(--gutter);
+  display: flex; justify-content: space-between; align-items: center;
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  background: rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+}
+nav.top.scrolled { border-bottom-color: var(--grey-200); background: rgba(255, 255, 255, 0.85); }
+.logo {
+  font-family: var(--font-display); font-weight: 500; font-size: 20px; letter-spacing: -0.01em;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.logo-dot { width: 10px; height: 10px; background: var(--yellow); border-radius: 50%; box-shadow: 0 0 0 3px var(--black); }
+nav.top ul { display: flex; gap: clamp(16px, 2.4vw, 36px); list-style: none; font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+nav.top ul a { color: var(--black-soft); transition: color 0.2s var(--ease); position: relative; padding: 4px 0; }
+nav.top ul a:hover { color: var(--blue-ink); }
+nav.top ul a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--yellow);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease);
+}
+nav.top ul a:hover::after { transform: scaleX(1); }
+@media (max-width: 760px) { nav.top ul { display: none; } }
+
+/* ————————————————————————————————————————————————————————————
+   HERO
+   ——————————————————————————————————————————————————————————— */
+.hero {
+  min-height: 100vh;
+  padding-top: clamp(140px, 18vh, 200px);
+  padding-bottom: clamp(60px, 8vh, 120px);
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+  background: var(--white);
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr; gap: 40px;
+  align-items: end;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 14vw, 220px);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: var(--black);
+}
+.hero-title .line { display: block; }
+.hero-title .accent {
+  font-style: italic;
+  color: var(--blue-ink);
+  font-weight: 300;
+}
+.hero-title .highlight {
+  background: var(--yellow);
+  padding: 0 0.1em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hero-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  border-top: 1px solid var(--black);
+  padding-top: 26px;
+  margin-top: clamp(40px, 6vh, 80px);
+}
+.hero-meta > div { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey-600); }
+.hero-meta strong { display: block; font-family: var(--font-body); font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--black); margin-top: 6px; font-weight: 500; }
+.hero-deck {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 34px);
+  line-height: 1.25;
+  color: var(--black-soft);
+  max-width: 720px;
+  margin-top: 32px;
+}
+
+.scroll-hint {
+  position: absolute; bottom: 28px; right: var(--gutter);
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--grey-600);
+}
+.scroll-hint .line-anim {
+  width: 60px; height: 1px; background: var(--black); position: relative; overflow: hidden;
+}
+.scroll-hint .line-anim::after {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 30%; background: var(--yellow);
+  animation: slideX 2.2s var(--ease) infinite;
+}
+@keyframes slideX { 0% { left: -30%; } 100% { left: 100%; } }
+
+/* Floating editorial tags on hero */
+.hero-tag {
+  position: absolute; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--blue-ink); padding: 6px 10px; border: 1px solid var(--blue-ink); border-radius: 100px;
+  background: var(--white);
+}
+.hero-tag.t1 { top: 22%; right: 8%; transform: rotate(-4deg); }
+.hero-tag.t2 { top: 46%; right: 4%; transform: rotate(3deg); background: var(--yellow); border-color: var(--black); color: var(--black); }
+.hero-tag.t3 { top: 64%; right: 12%; transform: rotate(-2deg); }
+@media (max-width: 900px) { .hero-tag { display: none; } }
+
+/* ————————————————————————————————————————————————————————————
+   MARQUEE
+   ——————————————————————————————————————————————————————————— */
+.marquee {
+  background: var(--black); color: var(--white);
+  padding: 26px 0; overflow: hidden;
+  border-top: 1px solid var(--black); border-bottom: 1px solid var(--black);
+}
+.marquee-track {
+  display: flex; gap: 64px; white-space: nowrap; width: max-content;
+  animation: marquee 40s linear infinite;
+  font-family: var(--font-display); font-style: italic; font-weight: 300;
+  font-size: clamp(28px, 4vw, 56px);
+  line-height: 1;
+}
+.marquee-track span { display: inline-flex; align-items: center; gap: 64px; }
+.marquee-track .dot { width: 10px; height: 10px; background: var(--yellow); border-radius: 50%; display: inline-block; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ————————————————————————————————————————————————————————————
+   DEFINITION BLOCK
+   ——————————————————————————————————————————————————————————— */
+.definition {
+  background: var(--white);
+  padding-top: clamp(100px, 12vw, 180px);
+  padding-bottom: clamp(100px, 12vw, 180px);
+}
+.definition-grid {
+  display: grid;
+  grid-template-columns: 1fr 2.2fr;
+  gap: clamp(40px, 6vw, 100px);
+  align-items: start;
+}
+@media (max-width: 820px) { .definition-grid { grid-template-columns: 1fr; } }
+.definition-label {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--grey-600);
+  position: sticky; top: 120px;
+}
+.definition-label strong { color: var(--black); display: block; margin-bottom: 10px; font-size: 14px; }
+.definition-body p {
+  font-family: var(--font-display); font-size: clamp(26px, 3.4vw, 52px); font-weight: 300;
+  line-height: 1.15; letter-spacing: -0.02em; color: var(--black);
+}
+.definition-body p + p { margin-top: 36px; font-size: clamp(18px, 1.4vw, 22px); line-height: 1.55;
+  font-family: var(--font-body); color: var(--black-soft); font-weight: 400; letter-spacing: 0;
+  max-width: 620px;
+}
+.definition-body .hl { background: var(--yellow); padding: 0 0.1em; }
+.definition-body .dash { color: var(--blue-ink); font-style: italic; }
+
+/* ————————————————————————————————————————————————————————————
+   THREE FORMS
+   ——————————————————————————————————————————————————————————— */
+.three-forms { background: var(--black); color: var(--white); }
+.three-forms h2 { color: var(--white); max-width: 15ch; }
+.three-forms .section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 80px; }
+.three-forms .section-head p { color: rgba(255,255,255,0.7); max-width: 44ch; font-size: 18px; }
+@media (max-width: 780px) { .three-forms .section-head { grid-template-columns: 1fr; } }
+
+.forms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid rgba(255,255,255,0.15); }
+@media (max-width: 900px) { .forms-grid { grid-template-columns: 1fr; } }
+.form-card {
+  padding: clamp(40px, 4vw, 60px) clamp(28px, 3vw, 44px);
+  border-right: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  position: relative;
+  transition: background 0.4s var(--ease);
+  min-height: 440px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.form-card:last-child { border-right: 0; }
+@media (max-width: 900px) { .form-card { border-right: 0; } }
+.form-card:hover { background: var(--blue-ink); }
+.form-card .num {
+  font-family: var(--font-mono); font-size: 14px; color: var(--yellow); letter-spacing: 0.1em;
+}
+.form-card h3 { color: var(--white); margin: 30px 0 18px; font-family: var(--font-display); font-weight: 400; }
+.form-card p { color: rgba(255,255,255,0.8); font-size: 16px; line-height: 1.6; }
+.form-card .example {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px dashed rgba(255,255,255,0.2);
+  font-family: var(--font-display); font-style: italic; font-weight: 300;
+  font-size: 17px; color: var(--yellow); line-height: 1.4;
+}
+
+/* ————————————————————————————————————————————————————————————
+   ORIGIN STORY (WASON)
+   ——————————————————————————————————————————————————————————— */
+.origin { background: var(--white); }
+.origin-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 100px); align-items: start; }
+@media (max-width: 900px) { .origin-grid { grid-template-columns: 1fr; } }
+.origin-side {
+  position: sticky; top: 120px;
+}
+.origin-year {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(80px, 14vw, 180px);
+  line-height: 0.85; color: var(--black); letter-spacing: -0.04em;
+}
+.origin-year .dot-acc { color: var(--yellow); }
+.origin-attr {
+  margin-top: 20px; font-family: var(--font-mono); font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--grey-600);
+}
+.origin-attr strong { display: block; color: var(--black); font-family: var(--font-body); font-size: 16px; text-transform: none; letter-spacing: 0; margin-top: 4px; font-weight: 500; }
+.origin-body h2 { margin-bottom: 32px; }
+.origin-body p + p { margin-top: 20px; }
+.origin-body p { font-size: 18px; line-height: 1.65; }
+.origin-body .pull {
+  margin: 40px 0;
+  padding: 30px 0;
+  border-top: 2px solid var(--black);
+  border-bottom: 2px solid var(--black);
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.3;
+  color: var(--black);
+}
+.origin-body .pull .q-mark {
+  font-size: 1.8em; line-height: 0; vertical-align: -0.3em; color: var(--yellow);
+  font-weight: 400;
+}
+
+/* ————————————————————————————————————————————————————————————
+   INTERACTIVE WASON DEMO
+   ——————————————————————————————————————————————————————————— */
+.demo { background: var(--yellow); color: var(--black); overflow: hidden; }
+.demo h2 { color: var(--black); margin-bottom: 24px; }
+.demo-intro { max-width: 640px; margin-bottom: 60px; }
+.demo-intro p { color: var(--black); font-size: 19px; line-height: 1.55; }
+.demo-intro p + p { margin-top: 16px; }
+
+.demo-card {
+  background: var(--black); color: var(--white);
+  border-radius: 24px;
+  padding: clamp(32px, 4vw, 56px);
+  max-width: 880px;
+  box-shadow: 16px 16px 0 var(--blue-ink);
+  position: relative;
+}
+.demo-label {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow);
+  margin-bottom: 22px;
+}
+.demo-rule {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(24px, 2.6vw, 36px);
+  line-height: 1.2; color: var(--white);
+  margin-bottom: 36px;
+}
+.seed-triple {
+  display: flex; gap: 14px; margin-bottom: 12px;
+}
+.seed-triple .n {
+  width: clamp(64px, 8vw, 90px); height: clamp(64px, 8vw, 90px);
+  background: var(--yellow); color: var(--black);
+  border-radius: 14px;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(30px, 3.6vw, 48px);
+  box-shadow: 4px 4px 0 var(--blue-electric);
+}
+.seed-note { color: rgba(255,255,255,0.65); font-size: 14px; margin-bottom: 32px; font-family: var(--font-mono); }
+
+.demo-input-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+@media (max-width: 640px) {
+  .demo-input-row { grid-template-columns: 1fr 1fr 1fr; }
+  .demo-input-row .test-btn { grid-column: 1 / -1; }
+}
+.demo-input-row input {
+  width: 100%;
+  padding: 18px 20px;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 500;
+  text-align: center;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: var(--white);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+  -moz-appearance: textfield;
+}
+.demo-input-row input::-webkit-outer-spin-button,
+.demo-input-row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.demo-input-row input:focus {
+  outline: none; border-color: var(--yellow); background: rgba(255, 214, 10, 0.08);
+}
+.test-btn {
+  padding: 0 32px;
+  background: var(--yellow); color: var(--black);
+  border-radius: 12px;
+  font-family: var(--font-body); font-weight: 600; font-size: 15px;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  transition: transform 0.2s var(--ease), background 0.2s var(--ease);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.test-btn:hover { transform: translateY(-2px); background: #FFDF33; }
+.test-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.demo-helper { font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+
+.demo-log {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 240px; overflow-y: auto;
+  margin-bottom: 30px;
+  padding-right: 8px;
+}
+.demo-log::-webkit-scrollbar { width: 6px; }
+.demo-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+.log-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.04);
+  border-left: 3px solid var(--grey-600);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  animation: logIn 0.4s var(--ease);
+}
+@keyframes logIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.log-row.yes { border-left-color: #5EE89E; }
+.log-row.no { border-left-color: #FF6E6E; }
+.log-row .triple { color: var(--white); font-size: 15px; letter-spacing: 0.05em; }
+.log-row .verdict { font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.12em; }
+.log-row.yes .verdict { color: #5EE89E; }
+.log-row.no .verdict { color: #FF6E6E; }
+
+.demo-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.reveal-btn {
+  padding: 14px 24px; border: 2px solid var(--yellow); color: var(--yellow); border-radius: 100px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.reveal-btn:hover { background: var(--yellow); color: var(--black); }
+.reset-btn {
+  padding: 14px 20px; color: rgba(255,255,255,0.6); font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+.reset-btn:hover { color: var(--white); }
+
+.reveal-box {
+  margin-top: 28px; padding: 24px 28px;
+  background: var(--blue-ink); color: var(--white); border-radius: 12px;
+  display: none; animation: logIn 0.5s var(--ease);
+}
+.reveal-box.show { display: block; }
+.reveal-box h4 { color: var(--yellow); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 12px; font-weight: 500; }
+.reveal-box .answer {
+  font-family: var(--font-display); font-weight: 400; font-style: italic;
+  font-size: clamp(22px, 2.4vw, 32px); line-height: 1.25;
+}
+.reveal-box .answer::before { content: "“"; color: var(--yellow); }
+.reveal-box .answer::after { content: "”"; color: var(--yellow); }
+.reveal-box .explain { margin-top: 18px; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+
+.demo-footnote { margin-top: 40px; font-family: var(--font-mono); font-size: 12px; color: var(--black); opacity: 0.65; max-width: 560px; line-height: 1.6; }
+
+/* ————————————————————————————————————————————————————————————
+   LANDMARK STUDIES
+   ——————————————————————————————————————————————————————————— */
+.studies { background: var(--white); }
+.studies h2 { margin-bottom: 20px; }
+.studies .section-intro { max-width: 640px; margin-bottom: 80px; font-size: 19px; line-height: 1.55; color: var(--black-soft); }
+
+.study-list { display: flex; flex-direction: column; border-top: 1px solid var(--black); }
+.study {
+  display: grid; grid-template-columns: 140px 1.4fr 2fr;
+  gap: clamp(20px, 3vw, 60px);
+  padding: clamp(32px, 4vw, 56px) 0;
+  border-bottom: 1px solid var(--grey-200);
+  align-items: start;
+  transition: background 0.3s var(--ease), padding 0.3s var(--ease);
+}
+.study:hover { background: var(--grey-50); padding-left: 20px; padding-right: 20px; }
+@media (max-width: 820px) { .study { grid-template-columns: 1fr; } }
+.study .year {
+  font-family: var(--font-display); font-weight: 300; font-size: clamp(48px, 6vw, 84px);
+  line-height: 0.9; color: var(--black); letter-spacing: -0.04em;
+}
+.study .year .sup { background: var(--yellow); padding: 0 0.08em; }
+.study .meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-600); margin-bottom: 10px; }
+.study h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 30px); margin-bottom: 12px; }
+.study .authors { font-family: var(--font-body); font-size: 15px; color: var(--blue-ink); font-style: italic; margin-bottom: 14px; }
+.study p { font-size: 16px; line-height: 1.65; color: var(--black-soft); }
+.study p + p { margin-top: 14px; }
+.study .finding {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: var(--yellow-soft);
+  border-left: 3px solid var(--yellow);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--black);
+  border-radius: 0 6px 6px 0;
+}
+.study .finding strong { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; display: block; margin-bottom: 4px; color: var(--blue-ink); }
+
+/* ————————————————————————————————————————————————————————————
+   DOMAINS (WHERE IT SHOWS UP)
+   ——————————————————————————————————————————————————————————— */
+.domains { background: var(--blue-ink); color: var(--white); overflow: hidden; }
+.domains h2 { color: var(--white); }
+.domains .section-head { margin-bottom: 80px; max-width: 800px; }
+.domains .section-head p { color: rgba(255,255,255,0.75); font-size: 19px; line-height: 1.55; margin-top: 24px; }
+
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+@media (max-width: 900px) { .domain-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .domain-grid { grid-template-columns: 1fr; } }
+.domain {
+  padding: clamp(32px, 3.5vw, 48px);
+  border-right: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  min-height: 340px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+  transition: background 0.4s var(--ease);
+}
+.domain:hover { background: rgba(255, 214, 10, 0.08); }
+.domain:nth-child(3n) { border-right: 0; }
+.domain:nth-last-child(-n+3) { border-bottom: 0; }
+@media (max-width: 900px) {
+  .domain:nth-child(3n) { border-right: 1px solid rgba(255,255,255,0.2); }
+  .domain:nth-child(2n) { border-right: 0; }
+  .domain:nth-last-child(-n+3) { border-bottom: 1px solid rgba(255,255,255,0.2); }
+  .domain:nth-last-child(-n+2) { border-bottom: 0; }
+}
+@media (max-width: 560px) {
+  .domain { border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+  .domain:last-child { border-bottom: 0; }
+}
+
+.domain-icon {
+  width: 54px; height: 54px; border-radius: 50%;
+  background: var(--yellow); color: var(--black);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 500; font-size: 24px;
+  margin-bottom: 24px;
+}
+.domain h3 { color: var(--white); margin-bottom: 12px; font-size: 26px; }
+.domain p { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.6; }
+.domain .stat {
+  margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(255,255,255,0.2);
+  font-family: var(--font-mono); font-size: 12px; color: var(--yellow); letter-spacing: 0.05em; line-height: 1.5;
+}
+.domain .stat .big { display: block; font-family: var(--font-display); font-weight: 400; font-size: 32px; color: var(--white); margin-bottom: 4px; letter-spacing: -0.02em; }
+
+/* ————————————————————————————————————————————————————————————
+   WHY IT HAPPENS (mechanisms)
+   ——————————————————————————————————————————————————————————— */
+.why { background: var(--white); }
+.why .why-head { display: grid; grid-template-columns: 4fr 6fr; gap: clamp(40px, 6vw, 100px); align-items: end; margin-bottom: 100px; }
+@media (max-width: 820px) { .why .why-head { grid-template-columns: 1fr; } }
+.why .why-head p { max-width: 56ch; font-size: 19px; line-height: 1.55; }
+
+.mech-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+@media (max-width: 820px) { .mech-grid { grid-template-columns: 1fr; } }
+.mech {
+  padding: 48px 0;
+  border-top: 1px solid var(--black);
+  display: grid; grid-template-columns: 60px 1fr; gap: 28px;
+  padding-right: clamp(20px, 3vw, 50px);
+}
+.mech:nth-child(odd) { padding-right: clamp(40px, 5vw, 80px); border-right: 1px solid var(--grey-200); padding-left: 0; }
+.mech:nth-child(even) { padding-left: clamp(40px, 5vw, 80px); }
+@media (max-width: 820px) { .mech:nth-child(odd) { border-right: 0; padding-right: 0; } .mech:nth-child(even) { padding-left: 0; } }
+.mech .mnum {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.1em;
+  color: var(--blue-ink); padding-top: 4px;
+}
+.mech h3 {
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 30px);
+  margin-bottom: 14px; letter-spacing: -0.01em;
+}
+.mech h3 em { color: var(--blue-ink); }
+.mech p { font-size: 16px; line-height: 1.65; color: var(--black-soft); }
+.mech p + p { margin-top: 10px; }
+.mech .cite { font-family: var(--font-mono); font-size: 11px; color: var(--grey-600); margin-top: 14px; letter-spacing: 0.06em; }
+
+/* ————————————————————————————————————————————————————————————
+   NEURO / BIG STAT
+   ——————————————————————————————————————————————————————————— */
+.neuro {
+  background: var(--black); color: var(--white);
+  padding: clamp(80px, 10vw, 140px) 0;
+}
+.neuro-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(40px, 6vw, 100px); align-items: center; }
+@media (max-width: 820px) { .neuro-grid { grid-template-columns: 1fr; } }
+.neuro h2 { color: var(--white); font-size: clamp(36px, 4.8vw, 72px); }
+.neuro h2 em { color: var(--yellow); font-style: italic; font-weight: 300; }
+.neuro p { color: rgba(255,255,255,0.8); font-size: 18px; line-height: 1.6; margin-top: 24px; }
+.neuro .cite { font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 20px; letter-spacing: 0.06em; }
+
+.brain-viz {
+  aspect-ratio: 1;
+  max-width: 440px;
+  margin-left: auto;
+  position: relative;
+}
+.brain-viz svg { width: 100%; height: 100%; }
+
+/* ————————————————————————————————————————————————————————————
+   INTELLIGENCE CALLOUT
+   ——————————————————————————————————————————————————————————— */
+.iq-callout {
+  background: var(--yellow); color: var(--black);
+  padding: clamp(80px, 10vw, 140px) 0;
+  text-align: center;
+}
+.iq-callout .huge {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(44px, 8vw, 120px);
+  line-height: 0.95; letter-spacing: -0.03em;
+  max-width: 18ch; margin: 30px auto;
+}
+.iq-callout .huge strong { font-weight: 600; font-style: normal; background: var(--black); color: var(--yellow); padding: 0 0.1em; }
+.iq-callout p { max-width: 620px; margin: 0 auto; font-size: 18px; line-height: 1.55; color: var(--black); }
+.iq-callout .cite { font-family: var(--font-mono); font-size: 12px; margin-top: 30px; letter-spacing: 0.1em; color: var(--blue-ink); }
+
+/* ————————————————————————————————————————————————————————————
+   RELATED BIASES
+   ——————————————————————————————————————————————————————————— */
+.related { background: var(--white); }
+.related h2 { margin-bottom: 16px; }
+.related .section-intro { max-width: 640px; margin-bottom: 60px; font-size: 19px; line-height: 1.55; color: var(--black-soft); }
+
+.bias-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 900px) { .bias-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .bias-grid { grid-template-columns: 1fr; } }
+
+.bias-card {
+  background: var(--white);
+  border: 1.5px solid var(--black);
+  border-radius: 20px;
+  padding: 28px;
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+  cursor: default;
+}
+.bias-card:hover { transform: translateY(-6px); background: var(--yellow-soft); }
+.bias-card .bname { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin-bottom: 10px; letter-spacing: -0.01em; }
+.bias-card .bdef { font-size: 15px; line-height: 1.55; color: var(--black-soft); }
+.bias-card .btag {
+  display: inline-block; margin-top: 16px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-ink);
+  padding: 4px 10px; border: 1px solid var(--blue-ink); border-radius: 100px;
+}
+
+/* ————————————————————————————————————————————————————————————
+   QUOTES
+   ——————————————————————————————————————————————————————————— */
+.quotes { background: var(--grey-50); padding: clamp(80px, 10vw, 140px) 0; }
+.quotes h2 { margin-bottom: 60px; max-width: 18ch; }
+.quote-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1.5px solid var(--black); background: var(--white); border-radius: 4px; overflow: hidden; }
+@media (max-width: 820px) { .quote-grid { grid-template-columns: 1fr; } }
+.quote {
+  padding: clamp(32px, 3.5vw, 48px);
+  border-right: 1.5px solid var(--black);
+  border-bottom: 1.5px solid var(--black);
+  position: relative;
+  transition: background 0.3s var(--ease);
+}
+.quote:nth-child(even) { border-right: 0; }
+.quote:nth-last-child(-n+2) { border-bottom: 0; }
+@media (max-width: 820px) {
+  .quote { border-right: 0; }
+  .quote:nth-last-child(2) { border-bottom: 1.5px solid var(--black); }
+}
+.quote:hover { background: var(--yellow-soft); }
+.quote .bigq {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(60px, 7vw, 110px); line-height: 0.5; color: var(--yellow);
+  display: block; height: 44px;
+  -webkit-text-stroke: 1px var(--black);
+}
+.quote blockquote {
+  font-family: var(--font-display); font-weight: 300; font-style: italic;
+  font-size: clamp(19px, 1.8vw, 26px); line-height: 1.35; color: var(--black);
+  margin: 10px 0 26px; letter-spacing: -0.005em;
+}
+.quote cite {
+  font-style: normal;
+  font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-ink);
+}
+.quote cite strong { font-family: var(--font-body); font-size: 14px; letter-spacing: 0; text-transform: none; display: block; color: var(--black); margin-bottom: 4px; font-weight: 600; }
+
+/* ————————————————————————————————————————————————————————————
+   DEBIAS STRATEGIES
+   ——————————————————————————————————————————————————————————— */
+.debias { background: var(--white); }
+.debias h2 { max-width: 16ch; margin-bottom: 20px; }
+.debias .intro { max-width: 640px; margin-bottom: 80px; }
+.debias .intro p { font-size: 19px; line-height: 1.55; color: var(--black-soft); }
+
+.strategy-list { display: grid; grid-template-columns: 1fr; gap: 0; }
+.strategy {
+  display: grid; grid-template-columns: 100px 1fr auto; gap: 30px; align-items: start;
+  padding: 32px 0;
+  border-top: 1px solid var(--grey-200);
+  position: relative;
+  transition: padding 0.3s var(--ease);
+}
+.strategy:first-child { border-top: 2px solid var(--black); }
+.strategy:last-child { border-bottom: 2px solid var(--black); }
+.strategy:hover { padding-left: 16px; }
+@media (max-width: 820px) {
+  .strategy { grid-template-columns: 60px 1fr; }
+  .strategy .evidence-pill { grid-column: 1 / -1; justify-self: start; margin-top: 10px; }
+}
+.strategy .snum {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(36px, 4vw, 56px); line-height: 0.9; letter-spacing: -0.03em;
+  color: var(--blue-ink);
+}
+.strategy h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 28px); margin-bottom: 8px; letter-spacing: -0.01em; }
+.strategy p { font-size: 16px; line-height: 1.6; color: var(--black-soft); max-width: 640px; }
+.evidence-pill {
+  padding: 8px 14px;
+  border: 1px solid var(--black); border-radius: 100px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  white-space: nowrap;
+  height: fit-content;
+  margin-top: 6px;
+}
+.evidence-pill.strong { background: var(--yellow); border-color: var(--black); color: var(--black); }
+.evidence-pill.mixed { background: var(--white); color: var(--black); }
+
+/* ————————————————————————————————————————————————————————————
+   KEY FIGURES
+   ——————————————————————————————————————————————————————————— */
+.figures { background: var(--grey-50); padding: clamp(80px, 10vw, 140px) 0; }
+.figures h2 { margin-bottom: 16px; }
+.figures .section-intro { max-width: 640px; margin-bottom: 60px; font-size: 19px; line-height: 1.55; color: var(--black-soft); }
+
+.figure-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+@media (max-width: 900px) { .figure-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .figure-row { grid-template-columns: 1fr; } }
+.figure-card {
+  background: var(--white);
+  border: 1.5px solid var(--black);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: transform 0.3s var(--ease);
+}
+.figure-card:hover { transform: translateY(-6px); box-shadow: 8px 8px 0 var(--yellow); }
+.figure-card .portrait {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--blue-ink); color: var(--yellow);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 500; font-size: 26px;
+  margin-bottom: 22px;
+}
+.figure-card h4 { font-size: 20px; font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; }
+.figure-card .years { font-family: var(--font-mono); font-size: 11px; color: var(--grey-600); letter-spacing: 0.06em; margin: 4px 0 14px; }
+.figure-card p { font-size: 14px; line-height: 1.55; color: var(--black-soft); }
+
+/* ————————————————————————————————————————————————————————————
+   FOOTER
+   ——————————————————————————————————————————————————————————— */
+footer.site {
+  background: var(--black); color: var(--white);
+  padding: clamp(80px, 10vw, 140px) 0 40px;
+}
+footer.site h2 {
+  color: var(--white); font-size: clamp(44px, 6vw, 88px);
+  max-width: 14ch; margin-bottom: 60px;
+}
+footer.site h2 em { font-style: italic; color: var(--yellow); font-weight: 300; }
+
+.sources-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+@media (max-width: 820px) { .sources-grid { grid-template-columns: 1fr; } }
+.src-col h4 {
+  color: var(--yellow); font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 20px; font-weight: 500;
+}
+.src-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.src-col a {
+  color: rgba(255,255,255,0.8); font-size: 15px; line-height: 1.4;
+  transition: color 0.2s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.src-col a:hover { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 40px; font-family: var(--font-mono); font-size: 12px;
+  color: rgba(255,255,255,0.5); letter-spacing: 0.06em;
+  flex-wrap: wrap; gap: 20px;
+}
+.footer-bottom .colophon { max-width: 50ch; line-height: 1.55; }
+
+/* ————————————————————————————————————————————————————————————
+   SCROLL REVEAL
+   ——————————————————————————————————————————————————————————— */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="top" id="topnav">
+  <a href="#top" class="logo">
+    <span class="logo-dot"></span>
+    <span>Confirmation&nbsp;Bias</span>
+  </a>
+  <ul>
+    <li><a href="#definition">What</a></li>
+    <li><a href="#forms">Forms</a></li>
+    <li><a href="#demo">Try&nbsp;it</a></li>
+    <li><a href="#studies">Studies</a></li>
+    <li><a href="#domains">Where</a></li>
+    <li><a href="#why">Why</a></li>
+    <li><a href="#resist">Resist</a></li>
+  </ul>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">A Field Guide · Est. 1960 · Peter Wason</div>
+        <h1 class="hero-title" style="margin-top: 28px;">
+          <span class="line">Confirmation</span>
+          <span class="line"><span class="accent">bias</span><span style="color: var(--yellow); -webkit-text-stroke: 2px var(--black);">.</span></span>
+        </h1>
+        <p class="hero-deck">
+          The most persistent bug in human thinking — the quiet tendency to
+          <span class="highlight">look for evidence that says we're right</span>
+          and ignore the evidence that says we're not.
+        </p>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <div>
+        Coined<strong>1960, London</strong>
+      </div>
+      <div>
+        Three forms<strong>Search · Interpret · Remember</strong>
+      </div>
+      <div>
+        Touched fields<strong>Medicine · Politics · Media · Science</strong>
+      </div>
+      <div>
+        Intelligence immunity<strong>None detected</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-tag t1">↓ Seeks what it already knows</div>
+  <div class="hero-tag t2">★ Works on you too</div>
+  <div class="hero-tag t3">✦ Not a moral failing</div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <span class="line-anim"></span>
+  </div>
+</header>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>See what you believe <span class="dot"></span></span>
+    <span>Believe what you see <span class="dot"></span></span>
+    <span>Remember what you want <span class="dot"></span></span>
+    <span>Forget what you don't <span class="dot"></span></span>
+    <span>See what you believe <span class="dot"></span></span>
+    <span>Believe what you see <span class="dot"></span></span>
+    <span>Remember what you want <span class="dot"></span></span>
+    <span>Forget what you don't <span class="dot"></span></span>
+  </div>
+</div>
+
+<!-- ================= DEFINITION ================= -->
+<section class="definition" id="definition">
+  <div class="container">
+    <div class="definition-grid reveal">
+      <div class="definition-label">
+        <strong>§ 01 · Definition</strong>
+        The working definition, in one long breath.
+      </div>
+      <div class="definition-body">
+        <p>
+          Confirmation bias is the tendency to <span class="hl">search for</span>,
+          <span class="hl">interpret</span>, and <span class="hl">recall</span>
+          information in ways that support the beliefs you
+          <span class="dash">already hold</span> — while discounting, avoiding,
+          or forgetting the evidence that doesn't.
+        </p>
+        <p>
+          It isn't lying. It isn't stupidity. It's the ordinary way a brain
+          works when it has an opinion and a limited attention span — which is
+          all of us, all of the time. The bias runs underneath consciousness,
+          so the people most certain they're being objective are often the ones
+          displaying it most clearly.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= THREE FORMS ================= -->
+<section class="three-forms" id="forms">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow white">§ 02 · Three Forms</div>
+        <h2 style="margin-top: 28px;">It works in <em style="font-style:italic;color:var(--yellow);">three</em> ways.</h2>
+      </div>
+      <p>
+        Psychologists separate confirmation bias into three mechanisms — three
+        distinct places where a belief quietly tilts the scales. In the real
+        world they work together, reinforcing each other in a loop.
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="forms-grid reveal">
+      <article class="form-card">
+        <div>
+          <div class="num">01 / Biased Search</div>
+          <h3>You look for yes, not no.</h3>
+          <p>
+            You type questions into the search bar that already contain the
+            answer. You ask the friend you know will agree. You read the study
+            that matches your prior, skip the one that doesn't. The mind treats
+            the confirming example as complete proof and the disconfirming one
+            as a special case.
+          </p>
+        </div>
+        <div class="example">
+          e.g. Typing <em>"is coffee good for you"</em> instead of <em>"is coffee bad for you"</em>.
+        </div>
+      </article>
+
+      <article class="form-card">
+        <div>
+          <div class="num">02 / Biased Interpretation</div>
+          <h3>Ambiguity bends toward belief.</h3>
+          <p>
+            When evidence is ambiguous — a glance, a study, a comment — your
+            prior belief chooses what it means. Two people watching the same
+            debate walk away with opposite accounts of who won, each one
+            certain the footage speaks for itself.
+          </p>
+        </div>
+        <div class="example">
+          e.g. Reading one study on the death penalty and becoming
+          <em>more</em> convinced of what you already thought.
+        </div>
+      </article>
+
+      <article class="form-card">
+        <div>
+          <div class="num">03 / Biased Memory</div>
+          <h3>The past edits itself.</h3>
+          <p>
+            You remember the times your hunch was right, not the times it
+            wasn't. Stereotype-consistent facts stick; the counterexamples
+            fade. In controlled studies, people report encountering more
+            confirming information than they actually did — memory rewriting
+            evidence to match belief.
+          </p>
+        </div>
+        <div class="example">
+          e.g. Insisting <em>you knew all along</em> that stock would crash —
+          conveniently forgetting the months you were bullish.
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ORIGIN ================= -->
+<section class="origin" id="origin">
+  <div class="container">
+    <div class="origin-grid reveal">
+      <aside class="origin-side">
+        <div class="eyebrow">§ 03 · Origin</div>
+        <div class="origin-year" style="margin-top: 24px;">
+          19<span class="dot-acc">6</span>0
+        </div>
+        <div class="origin-attr">
+          Experiment by
+          <strong>Peter C. Wason</strong>
+          University College London
+        </div>
+      </aside>
+
+      <div class="origin-body">
+        <h2>The puzzle that gave the bias its name.</h2>
+        <p>
+          In 1960, a British cognitive psychologist named Peter Wason ran a
+          small experiment that would reshape how we think about thinking.
+          He handed his subjects a sequence of three numbers — <strong>2, 4,
+          6</strong> — and told them it followed a rule he had in mind. Their
+          job was to guess the rule. They could propose any other three
+          numbers, and he would say only whether that new triple fit the rule
+          or not.
+        </p>
+        <p>
+          Most people immediately formed a hypothesis — <em>consecutive even
+          numbers</em>, or <em>numbers increasing by two</em> — and began
+          testing it. They tried 8, 10, 12. <em>Yes.</em> They tried 14, 16,
+          18. <em>Yes.</em> Encouraged, they announced their rule with
+          confidence.
+        </p>
+        <p>
+          They were wrong. The rule was simpler than anything they had
+          guessed: <strong>any three ascending numbers</strong>. But almost
+          nobody tried 1, 2, 37. Nobody tried to break their own hypothesis.
+          They sought confirmation, got it, stopped.
+        </p>
+        <blockquote class="pull">
+          <span class="q-mark">"</span>Obtaining the correct solution necessitates
+          a willingness to try to <em>falsify</em> hypotheses, and thus to test
+          those intuitive ideas that so often carry the feeling of certitude.<span class="q-mark">"</span>
+          <div style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-600); margin-top: 20px;">— Peter Wason, 1960</div>
+        </blockquote>
+        <p>
+          Wason called this pattern <em>confirmation bias</em>. Sixty-five
+          years later, the puzzle still works on virtually everyone who tries
+          it — including, if you'd like to find out, you.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INTERACTIVE DEMO ================= -->
+<section class="demo" id="demo">
+  <div class="container">
+    <div class="demo-intro reveal">
+      <div class="eyebrow">§ 04 · Try it on yourself</div>
+      <h2 style="margin-top: 28px;">The 2–4–6 task.</h2>
+      <p>
+        I have a rule in mind. The triple <strong>2, 4, 6</strong> fits it.
+        Guess the rule by proposing other triples. For each one I'll tell you
+        <em>yes</em> (it fits) or <em>no</em> (it doesn't). Keep going until
+        you're sure — then reveal the answer and see how you did.
+      </p>
+      <p>
+        <em>No cheating. The honest version is more interesting.</em>
+      </p>
+    </div>
+
+    <div class="demo-card reveal">
+      <div class="demo-label">Wason 2–4–6 · Interactive</div>
+      <div class="demo-rule">
+        I'm thinking of a rule. This triple fits it:
+      </div>
+
+      <div class="seed-triple">
+        <div class="n">2</div>
+        <div class="n">4</div>
+        <div class="n">6</div>
+      </div>
+      <div class="seed-note">// Guess other triples. I'll tell you yes or no.</div>
+
+      <form class="demo-input-row" id="demoForm" autocomplete="off">
+        <input type="number" id="a" placeholder="1st" required inputmode="numeric" />
+        <input type="number" id="b" placeholder="2nd" required inputmode="numeric" />
+        <input type="number" id="c" placeholder="3rd" required inputmode="numeric" />
+        <button type="submit" class="test-btn" id="testBtn">Test →</button>
+      </form>
+      <div class="demo-helper" id="helper">Enter three whole numbers.</div>
+
+      <div class="demo-log" id="log" aria-live="polite"></div>
+
+      <div class="demo-actions">
+        <button type="button" class="reveal-btn" id="revealBtn">Reveal the rule</button>
+        <button type="button" class="reset-btn" id="resetBtn">Reset</button>
+        <span id="stats" style="margin-left:auto;font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.6);letter-spacing:0.08em;"></span>
+      </div>
+
+      <div class="reveal-box" id="revealBox">
+        <h4>The rule was</h4>
+        <div class="answer">Any three numbers in ascending order.</div>
+        <div class="explain">
+          That's it. Not "even numbers." Not "+2 each time." Just
+          <em>ascending</em>. Most people guess something far more specific
+          and test only triples that fit it — producing a long string of
+          <em>yes</em>es that feel like proof. To actually discover the rule
+          you had to try something you expected to fail: <em>1, 2, 99</em>,
+          or <em>7, 7, 8</em>, or even <em>–3, 0, 1</em>. If you kept hearing
+          <em>yes</em>, the bias was doing its work.
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-footnote">
+      Adapted from Wason (1960), <em>"On the failure to eliminate hypotheses
+      in a conceptual task"</em>, Quarterly Journal of Experimental
+      Psychology 12(3).
+    </div>
+  </div>
+</section>
+
+<!-- ================= LANDMARK STUDIES ================= -->
+<section class="studies" id="studies">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">§ 05 · Landmark studies</div>
+      <h2 style="margin-top: 28px;">The experiments that pinned it down.</h2>
+      <p class="section-intro">
+        After Wason, psychologists kept finding the bias almost everywhere
+        they looked. A handful of studies became canon — each one isolating
+        a different mechanism and showing it operating on real people with
+        real beliefs.
+      </p>
+    </div>
+
+    <div class="study-list reveal">
+
+      <article class="study">
+        <div class="year">19<span class="sup">79</span></div>
+        <div>
+          <div class="meta">Biased Assimilation</div>
+          <h3>The death-penalty study.</h3>
+          <div class="authors">Lord, Ross &amp; Lepper · JPSP 37(11)</div>
+        </div>
+        <div>
+          <p>
+            Forty-eight undergraduates — half in favor of capital punishment,
+            half opposed — read two fabricated studies, one supporting the
+            deterrence argument and one undercutting it. Each participant saw
+            both.
+          </p>
+          <div class="finding">
+            <strong>Finding</strong>
+            Instead of moving toward the middle, both groups became
+            <em>more</em> extreme in their original views. They rated the
+            supporting study well-conducted and the opposing one flawed.
+            Exposure to mixed evidence produced polarization, not agreement.
+          </div>
+        </div>
+      </article>
+
+      <article class="study">
+        <div class="year">19<span class="sup">83</span></div>
+        <div>
+          <div class="meta">Biased Interpretation &amp; Memory</div>
+          <h3>The Hannah study.</h3>
+          <div class="authors">Darley &amp; Gross · JPSP 44(1)</div>
+        </div>
+        <div>
+          <p>
+            Participants watched a video of a girl, "Hannah," taking an oral
+            test with mixed performance. Before the video, half were shown a
+            photo of her in an upper-class suburban setting; the other half
+            saw her in a lower-class urban one. The test itself was identical
+            for everyone.
+          </p>
+          <div class="finding">
+            <strong>Finding</strong>
+            The "wealthy Hannah" group rated her above grade level; the "poor
+            Hannah" group rated her below. They even misremembered the same
+            answers as correct or incorrect to match the expectation. Class
+            schemas bent both interpretation and memory.
+          </div>
+        </div>
+      </article>
+
+      <article class="study">
+        <div class="year">19<span class="sup">98</span></div>
+        <div>
+          <div class="meta">Synthesis</div>
+          <h3>"A ubiquitous phenomenon in many guises."</h3>
+          <div class="authors">Raymond Nickerson · Review of General Psychology 2(2)</div>
+        </div>
+        <div>
+          <p>
+            Nickerson reviewed four decades of scattered research — on
+            reasoning tasks, medical diagnosis, legal judgment, scientific
+            inference, and everyday decision-making — and gave the field its
+            definitive synthesis.
+          </p>
+          <div class="finding">
+            <strong>Finding</strong>
+            Confirmation bias is not a niche effect. It appears in virtually
+            every domain where humans form hypotheses and evaluate evidence.
+            Nickerson's definition — <em>"the seeking or interpreting of
+            evidence in ways that are partial to existing beliefs"</em> — is
+            the one most cited today.
+          </div>
+        </div>
+      </article>
+
+      <article class="study">
+        <div class="year">20<span class="sup">06</span></div>
+        <div>
+          <div class="meta">Neuroscience</div>
+          <h3>Partisan brains in the scanner.</h3>
+          <div class="authors">Drew Westen et al. · J. Cognitive Neuroscience 18(11)</div>
+        </div>
+        <div>
+          <p>
+            Committed Democrats and Republicans read contradictory statements
+            from the candidate they supported and the one they opposed, while
+            an fMRI scanner watched what lit up.
+          </p>
+          <div class="finding">
+            <strong>Finding</strong>
+            Resolving the contradiction didn't engage the brain's usual
+            reasoning circuits. It engaged emotional and conflict-resolution
+            regions — and, once the conflict was reconciled in their
+            candidate's favor, the <em>reward circuits</em>. Defending a
+            belief literally felt good.
+          </div>
+        </div>
+      </article>
+
+      <article class="study">
+        <div class="year">20<span class="sup">19</span></div>
+        <div>
+          <div class="meta">Good News</div>
+          <h3>The backfire effect, mostly isn't.</h3>
+          <div class="authors">Wood &amp; Porter · Political Behavior 41</div>
+        </div>
+        <div>
+          <p>
+            Across 52 politically charged issues and more than 10,000
+            participants, the authors tested whether corrections to
+            misinformation actually <em>strengthen</em> the false belief —
+            the feared "backfire effect" popularized a decade earlier.
+          </p>
+          <div class="finding">
+            <strong>Finding</strong>
+            They couldn't reliably produce it. Most people, most of the time,
+            do update their beliefs when corrected — even on polarized topics.
+            Confirmation bias is real; the idea that corrections make things
+            worse is, mercifully, overstated.
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= DOMAINS ================= -->
+<section class="domains" id="domains">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow white">§ 06 · Where you find it</div>
+      <h2 style="margin-top: 28px;">It's <em style="font-style:italic;color:var(--yellow);">everywhere</em> humans reason.</h2>
+      <p>
+        Confirmation bias is not a special condition of the naive or the
+        uninformed. It shows up in courtrooms, operating theaters, trading
+        floors, newsrooms, and bedrooms — anywhere a human holds a prior
+        belief and encounters evidence about it.
+      </p>
+    </div>
+
+    <div class="domain-grid reveal">
+
+      <article class="domain">
+        <div>
+          <div class="domain-icon">▒</div>
+          <h3>Media &amp; Feeds</h3>
+          <p>
+            Algorithms trained on engagement learn what you already agree
+            with and serve more of it. The result is a reinforcing loop —
+            your bias rewards the platform's predictions, the platform
+            rewards your bias. Filter bubbles are partly algorithm, mostly
+            us.
+          </p>
+        </div>
+        <div class="stat">
+          <span class="big">∞</span>
+          Echo chambers are co-authored: platform + person.
+        </div>
+      </article>
+
+      <article class="domain">
+        <div>
+          <div class="domain-icon">◆</div>
+          <h3>Politics</h3>
+          <p>
+            When information is ambiguous — and politics usually is —
+            partisans interpret the same data differently and grow <em>more</em>
+            confident of opposing conclusions. Corrections help, but slowly;
+            identity is harder to update than fact.
+          </p>
+        </div>
+        <div class="stat">
+          <span class="big">2×</span>
+          Polarization can <em>increase</em> after mixed evidence.
+        </div>
+      </article>
+
+      <article class="domain">
+        <div>
+          <div class="domain-icon">☤</div>
+          <h3>Medicine</h3>
+          <p>
+            Doctors anchor on an early diagnosis, then read subsequent labs
+            and symptoms as confirmation. Reviews have linked confirmation
+            bias to between a third and three-quarters of diagnostic errors
+            in studied cases — more than pure knowledge gaps.
+          </p>
+        </div>
+        <div class="stat">
+          <span class="big">36–77%</span>
+          of diagnostic errors involve cognitive bias.
+        </div>
+      </article>
+
+      <article class="domain">
+        <div>
+          <div class="domain-icon">≋</div>
+          <h3>Science</h3>
+          <p>
+            <em>p-hacking</em> — running analyses until one turns
+            significant. <em>HARKing</em> — presenting a post-hoc hypothesis
+            as pre-specified. Both are confirmation bias dressed in
+            methodology. In one survey, ~43% of psychologists admitted to
+            HARKing at least once.
+          </p>
+        </div>
+        <div class="stat">
+          <span class="big">~43%</span>
+          of psychologists: "I've HARKed at least once."
+        </div>
+      </article>
+
+      <article class="domain">
+        <div>
+          <div class="domain-icon">$</div>
+          <h3>Finance</h3>
+          <p>
+            Investors cling to a thesis. Every earnings beat becomes proof;
+            every miss, a "one-off." Buffett built a career on a single
+            countermeasure: seek out people who disagree with you and take
+            them seriously.
+          </p>
+        </div>
+        <div class="stat">
+          <span class="big">“</span>
+          <em>"What humans are best at is interpreting all new information so that prior conclusions remain intact." — Buffett</em>
+        </div>
+      </article>
+
+      <article class="domain">
+        <div>
+          <div class="domain-icon">♡</div>
+          <h3>Everyday life</h3>
+          <p>
+            The colleague you decided was cold in week one stays cold in
+            week fifty. First impressions feed themselves. Stereotypes
+            survive on selective memory. Relationships erode when every
+            ambiguous moment is read as evidence of a pattern you already
+            assumed.
+          </p>
+        </div>
+        <div class="stat">
+          <span class="big">1m</span>
+          Time for most interviewers to form a snap judgment.
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY IT HAPPENS ================= -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="why-head reveal">
+      <div>
+        <div class="eyebrow">§ 07 · Mechanism</div>
+        <h2 style="margin-top: 28px;">Why a good brain does this.</h2>
+      </div>
+      <p>
+        Confirmation bias isn't a glitch somewhere in the wiring — it's a
+        natural consequence of four overlapping features of the mind working
+        as designed. Understanding them is the first step in noticing the
+        bias before it finishes its work.
+      </p>
+    </div>
+
+    <div class="mech-grid reveal">
+
+      <article class="mech">
+        <div class="mnum">M.01</div>
+        <div>
+          <h3>Cognitive ease <em>(System 1 is lazy.)</em></h3>
+          <p>
+            Kahneman's framework splits thought into two systems — <strong>System
+            1</strong> (fast, automatic, cheap) and <strong>System 2</strong>
+            (slow, deliberate, costly). Considering evidence that contradicts
+            you requires System 2. Agreeing with yourself is free. Most of the
+            time, your brain picks free.
+          </p>
+          <div class="cite">Kahneman, <em>Thinking, Fast and Slow</em>, 2011</div>
+        </div>
+      </article>
+
+      <article class="mech">
+        <div class="mnum">M.02</div>
+        <div>
+          <h3>Cognitive dissonance <em>(discomfort seeks relief.)</em></h3>
+          <p>
+            When new information clashes with a held belief, the clash itself
+            feels physically bad. Festinger's theory predicts — and decades of
+            research confirm — that we resolve the discomfort by adjusting the
+            information, not the belief.
+          </p>
+          <div class="cite">Festinger, 1957</div>
+        </div>
+      </article>
+
+      <article class="mech">
+        <div class="mnum">M.03</div>
+        <div>
+          <h3>Ego protection <em>(you are your beliefs.)</em></h3>
+          <p>
+            A belief isn't just a claim about the world. It's part of who you
+            are, who you're loyal to, and what tribe you belong to. Disconfirming
+            evidence attacks identity, not just epistemology — so the defenses
+            it triggers are proportional.
+          </p>
+          <div class="cite">Tajfel &amp; Turner, social identity theory</div>
+        </div>
+      </article>
+
+      <article class="mech">
+        <div class="mnum">M.04</div>
+        <div>
+          <h3>Argumentative reasoning <em>(it may be a feature.)</em></h3>
+          <p>
+            Mercier &amp; Sperber argue reasoning evolved not to find truth
+            but to win arguments — to convince others and evaluate their
+            attempts to convince us. In that frame, confirmation bias is a
+            feature in social settings, a bug in solitary ones. Groups with
+            real disagreement can outperform any individual; like-minded
+            groups amplify the mistake.
+          </p>
+          <div class="cite">Mercier &amp; Sperber, BBS 2011</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEURO ================= -->
+<section class="neuro">
+  <div class="container">
+    <div class="neuro-grid reveal">
+      <div>
+        <div class="eyebrow white">§ 08 · Neuroscience</div>
+        <h2 style="margin-top: 28px;">Defending a belief <em>lights up the reward system.</em></h2>
+        <p>
+          In Drew Westen's 2006 fMRI study, committed partisans read
+          contradictory statements from the politicians they supported. While
+          they wrestled with the contradiction, the reasoning cortex stayed
+          quiet and emotional-regulation networks did the work. When they
+          landed on an interpretation that preserved their loyalty, the
+          brain's <strong>reward circuits</strong> — the ventral striatum, the
+          nucleus accumbens — activated.
+        </p>
+        <p>
+          Which is to say: the brain handed out a dose of the same chemistry
+          that rewards a good meal, for successfully convincing itself it was
+          right all along.
+        </p>
+        <div class="cite">Westen et al., Journal of Cognitive Neuroscience 18(11), 2006</div>
+      </div>
+
+      <div class="brain-viz">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFD60A" stop-opacity="0.85" />
+              <stop offset="70%" stop-color="#FFD60A" stop-opacity="0.05" />
+              <stop offset="100%" stop-color="#FFD60A" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#1E4FFF" stop-opacity="0.6" />
+              <stop offset="80%" stop-color="#1E4FFF" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <!-- outer circle -->
+          <circle cx="200" cy="200" r="170" fill="none" stroke="#FFD60A" stroke-opacity="0.15" stroke-dasharray="2 6"/>
+          <circle cx="200" cy="200" r="140" fill="none" stroke="#FFFFFF" stroke-opacity="0.08"/>
+          <!-- brain abstract -->
+          <path d="M120 180 C120 110, 200 80, 260 120 C310 100, 340 170, 305 220 C330 270, 280 310, 230 290 C180 320, 110 290, 105 230 C75 220, 80 170, 120 180 Z"
+                fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="1.5"/>
+          <path d="M160 170 Q180 150, 200 170 T240 170" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1"/>
+          <path d="M150 220 Q190 205, 225 225 T280 215" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1"/>
+          <path d="M170 260 Q200 245, 230 260" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1"/>
+          <!-- reward glow: ventral striatum (roughly) -->
+          <circle cx="200" cy="230" r="70" fill="url(#glow)">
+            <animate attributeName="r" values="60;75;60" dur="3.2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;1;0.8" dur="3.2s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="200" cy="230" r="8" fill="#FFD60A" />
+          <!-- secondary glow -->
+          <circle cx="170" cy="190" r="38" fill="url(#glow2)">
+            <animate attributeName="r" values="30;42;30" dur="4s" repeatCount="indefinite" />
+          </circle>
+          <!-- label -->
+          <g font-family="JetBrains Mono, monospace" font-size="10" fill="#FFD60A" letter-spacing="1.5">
+            <line x1="245" y1="235" x2="320" y2="260" stroke="#FFD60A" stroke-width="1"/>
+            <text x="323" y="264">VENTRAL STRIATUM</text>
+            <text x="323" y="278" fill="#FFFFFF" fill-opacity="0.5">reward / reinforcement</text>
+          </g>
+          <g font-family="JetBrains Mono, monospace" font-size="10" fill="#1E4FFF" letter-spacing="1.5">
+            <line x1="155" y1="185" x2="80" y2="150" stroke="#1E4FFF" stroke-width="1"/>
+            <text x="20" y="144" fill="#FFFFFF" fill-opacity="0.8">EMOTION</text>
+            <text x="20" y="157" fill="#FFFFFF" fill-opacity="0.4">conflict resolution</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= IQ CALLOUT ================= -->
+<section class="iq-callout">
+  <div class="container reveal">
+    <div class="eyebrow" style="justify-content:center;">§ 09 · The uncomfortable finding</div>
+    <div class="huge">
+      Being smarter <br />
+      <strong>does not</strong> <br />
+      protect you.
+    </div>
+    <p>
+      Keith Stanovich's research makes this point unflinchingly. Intelligence
+      correlates negatively with most cognitive biases — but not with
+      confirmation bias (or its close cousin, <em>myside bias</em>). If
+      anything, higher cognitive ability makes people <em>better at building
+      sophisticated arguments for the side they were already on</em>. Being
+      clever isn't a defense. Sometimes it's the weapon.
+    </p>
+    <div class="cite">Stanovich, West &amp; Toplak · 2013, 2021</div>
+  </div>
+</section>
+
+<!-- ================= RELATED BIASES ================= -->
+<section class="related">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">§ 10 · Extended family</div>
+      <h2 style="margin-top: 28px;">Cousins, siblings, and accomplices.</h2>
+      <p class="section-intro">
+        Confirmation bias doesn't work alone. A handful of related biases
+        stack on top of it, reinforcing the same core tendency from different
+        angles.
+      </p>
+    </div>
+
+    <div class="bias-grid reveal">
+
+      <article class="bias-card">
+        <div class="bname">Anchoring</div>
+        <p class="bdef">
+          The first number or idea you encounter sets the reference point
+          for everything that follows. Confirmation bias then locks the
+          anchor in.
+        </p>
+        <span class="btag">sibling</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Availability heuristic</div>
+        <p class="bdef">
+          You judge how likely something is by how easily examples come to
+          mind. Confirmation bias makes confirming examples spring up
+          fastest.
+        </p>
+        <span class="btag">cousin</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Belief perseverance</div>
+        <p class="bdef">
+          Continuing to hold a belief even after the evidence for it has
+          been explicitly retracted. The residue of years of biased
+          confirmation.
+        </p>
+        <span class="btag">consequence</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Motivated reasoning</div>
+        <p class="bdef">
+          Believing what you want to believe. Confirmation bias is the
+          quiet, unconscious mechanism; motivated reasoning is the
+          goal-directed version.
+        </p>
+        <span class="btag">umbrella</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Myside bias</div>
+        <p class="bdef">
+          Stanovich's term for confirmation bias specifically in service of
+          ideology or identity. Especially resistant; unrelated to IQ.
+        </p>
+        <span class="btag">political sibling</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Illusory correlation</div>
+        <p class="bdef">
+          Seeing a pattern between two unrelated things because
+          co-occurrences are remembered and non-co-occurrences forgotten.
+        </p>
+        <span class="btag">memory cousin</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Halo effect</div>
+        <p class="bdef">
+          A positive impression in one area bleeds into judgments of
+          unrelated traits. The first good impression then confirms itself.
+        </p>
+        <span class="btag">first-impression cousin</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Dunning–Kruger</div>
+        <p class="bdef">
+          Low skill plus biased recall of your own successes = unshakeable
+          confidence. Confirmation bias is what keeps the overestimate warm.
+        </p>
+        <span class="btag">accomplice</span>
+      </article>
+
+      <article class="bias-card">
+        <div class="bname">Backfire effect</div>
+        <p class="bdef">
+          The (originally-feared, now-contested) claim that corrections
+          strengthen false beliefs. Recent evidence suggests most people
+          do update — slowly.
+        </p>
+        <span class="btag">disputed</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUOTES ================= -->
+<section class="quotes">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">§ 11 · The record</div>
+      <h2 style="margin-top: 28px;">People have been noticing this for a long time.</h2>
+    </div>
+
+    <div class="quote-grid reveal">
+
+      <article class="quote">
+        <span class="bigq">“</span>
+        <blockquote>
+          The human understanding, when it has once adopted an opinion,
+          draws all things else to support and agree with it.
+        </blockquote>
+        <cite>
+          <strong>Francis Bacon</strong>
+          Novum Organum · 1620
+        </cite>
+      </article>
+
+      <article class="quote">
+        <span class="bigq">“</span>
+        <blockquote>
+          An adopted hypothesis gives us lynx-eyes for everything that
+          confirms it and makes us blind to everything that contradicts it.
+        </blockquote>
+        <cite>
+          <strong>Arthur Schopenhauer</strong>
+          19th c.
+        </cite>
+      </article>
+
+      <article class="quote">
+        <span class="bigq">“</span>
+        <blockquote>
+          The most difficult subjects can be explained to the most slow-witted
+          man if he has not formed any idea of them already; but the simplest
+          thing cannot be made clear to the most intelligent man if he is
+          firmly persuaded that he knows already.
+        </blockquote>
+        <cite>
+          <strong>Leo Tolstoy</strong>
+          The Kingdom of God Is Within You · 1894
+        </cite>
+      </article>
+
+      <article class="quote">
+        <span class="bigq">“</span>
+        <blockquote>
+          The first principle is that you must not fool yourself — and you
+          are the easiest person to fool.
+        </blockquote>
+        <cite>
+          <strong>Richard Feynman</strong>
+          Caltech Commencement · 1974
+        </cite>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEBIAS / RESIST ================= -->
+<section class="debias" id="resist">
+  <div class="container">
+    <div class="intro reveal">
+      <div class="eyebrow">§ 12 · What actually helps</div>
+      <h2 style="margin-top: 28px;">You can't delete the bias. You can out-design it.</h2>
+      <p>
+        Awareness alone barely moves the needle — knowing about confirmation
+        bias doesn't reliably protect you from it. What works is redesigning
+        the process of thinking, not the thinker. These are the techniques
+        with the most research behind them.
+      </p>
+    </div>
+
+    <div class="strategy-list reveal">
+
+      <article class="strategy">
+        <div class="snum">01</div>
+        <div>
+          <h3>Ask: "What would prove me wrong?"</h3>
+          <p>
+            The most direct inversion of Wason's trap. Before testing your
+            idea, define — concretely — what evidence would make you abandon
+            it. If no evidence could, it's not an idea; it's a commitment.
+          </p>
+        </div>
+        <span class="evidence-pill strong">strong evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">02</div>
+        <div>
+          <h3>Run a pre-mortem.</h3>
+          <p>
+            Before committing to a decision, imagine it failed spectacularly
+            and write the post-mortem. Reframing the task as <em>explaining
+            failure</em> routes around confirmation bias, because now the
+            mind is hunting for reasons the plan broke.
+          </p>
+        </div>
+        <span class="evidence-pill strong">strong evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">03</div>
+        <div>
+          <h3>Diversify who's in the room.</h3>
+          <p>
+            Cognitive diversity — genuinely different backgrounds, fields,
+            and priors — produces better group decisions than any individual
+            debiasing technique. Homogeneous groups share blind spots and
+            amplify them.
+          </p>
+        </div>
+        <span class="evidence-pill strong">strong evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">04</div>
+        <div>
+          <h3>Make disagreement a formal role.</h3>
+          <p>
+            Assign a devil's advocate, or run red-team exercises. When
+            counterargument is someone's explicit job, it stops being a
+            social violation and starts being a produced deliverable.
+          </p>
+        </div>
+        <span class="evidence-pill strong">strong evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">05</div>
+        <div>
+          <h3>Make accuracy accountable.</h3>
+          <p>
+            When people know they will have to justify their reasoning
+            <em>for accuracy</em>, not for loyalty, biased information
+            selection drops. Accountability-for-being-right is the version
+            that helps; accountability-for-the-team-line can make bias worse.
+          </p>
+        </div>
+        <span class="evidence-pill strong">good evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">06</div>
+        <div>
+          <h3>Consider the opposite — explicitly.</h3>
+          <p>
+            Before committing to a judgment, write out the strongest case
+            for the opposite conclusion as if you believed it. Evidence is
+            mixed, but when the technique is done carefully rather than
+            performed, it consistently reduces overconfidence.
+          </p>
+        </div>
+        <span class="evidence-pill mixed">mixed evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">07</div>
+        <div>
+          <h3>Cultivate <em>actively open-minded thinking.</em></h3>
+          <p>
+            A measurable trait — willingness to revise beliefs, tolerance for
+            uncertainty, reflective postponement of judgment. Unlike raw
+            intelligence, it genuinely predicts resistance to confirmation
+            bias, conspiracy thinking, and superstition. It can be practiced.
+          </p>
+        </div>
+        <span class="evidence-pill strong">strong evidence</span>
+      </article>
+
+      <article class="strategy">
+        <div class="snum">08</div>
+        <div>
+          <h3>Slow the thought down.</h3>
+          <p>
+            Small friction — reading in a harder-to-scan format, writing a
+            decision longhand, pausing overnight before publishing — pulls
+            the work from System 1 to System 2. It feels worse. It thinks
+            better.
+          </p>
+        </div>
+        <span class="evidence-pill mixed">moderate evidence</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= KEY FIGURES ================= -->
+<section class="figures">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">§ 13 · The people</div>
+      <h2 style="margin-top: 28px;">Who mapped the territory.</h2>
+      <p class="section-intro">
+        Four psychologists whose work still anchors the field.
+      </p>
+    </div>
+
+    <div class="figure-row reveal">
+      <article class="figure-card">
+        <div class="portrait">PW</div>
+        <h4>Peter Wason</h4>
+        <div class="years">1924 – 2003 · UK</div>
+        <p>
+          Cognitive psychologist at UCL. Designed the 2-4-6 task and the
+          Wason selection task; coined the term "confirmation bias."
+        </p>
+      </article>
+      <article class="figure-card">
+        <div class="portrait">RN</div>
+        <h4>Raymond Nickerson</h4>
+        <div class="years">b. 1931 · US</div>
+        <p>
+          Tufts psychologist. His 1998 review synthesized four decades of
+          research and gave the bias its working definition.
+        </p>
+      </article>
+      <article class="figure-card">
+        <div class="portrait">CL</div>
+        <h4>Charles Lord</h4>
+        <div class="years">b. 1950 · US</div>
+        <p>
+          Social psychologist behind the 1979 death-penalty study on biased
+          assimilation, and later work on "consider the opposite."
+        </p>
+      </article>
+      <article class="figure-card">
+        <div class="portrait">KS</div>
+        <h4>Keith Stanovich</h4>
+        <div class="years">b. 1950 · Canada</div>
+        <p>
+          Toronto psychologist who distinguishes <em>myside bias</em> from
+          confirmation bias and shows it isn't blunted by intelligence.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site">
+  <div class="container">
+    <h2 class="reveal">A closing note: <em>treat your own certainty as suspicious.</em></h2>
+
+    <div class="sources-grid reveal">
+      <div class="src-col">
+        <h4>Foundational papers</h4>
+        <ul>
+          <li><a href="https://bear.warrington.ufl.edu/brenner/mar7588/Papers/wason-qjep1960.pdf" target="_blank" rel="noopener">Wason (1960) — On the failure to eliminate hypotheses</a></li>
+          <li><a href="http://fbaum.unc.edu/teaching/articles/jpsp-1979-Lord-Ross-Lepper.pdf" target="_blank" rel="noopener">Lord, Ross &amp; Lepper (1979) — Biased assimilation &amp; attitude polarization</a></li>
+          <li><a href="http://bear.warrington.ufl.edu/brenner/mar7588/Papers/darley-gross-jpsp1983.pdf" target="_blank" rel="noopener">Darley &amp; Gross (1983) — The Hannah study</a></li>
+          <li><a href="https://pages.ucsd.edu/~mckenzie/nickersonConfirmationBias.pdf" target="_blank" rel="noopener">Nickerson (1998) — A ubiquitous phenomenon in many guises</a></li>
+        </ul>
+      </div>
+      <div class="src-col">
+        <h4>Mechanism &amp; neuro</h4>
+        <ul>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/17069484/" target="_blank" rel="noopener">Westen et al. (2006) — Neural bases of motivated reasoning</a></li>
+          <li><a href="https://www.dan.sperber.fr/wp-content/uploads/2011_mercier_why-do-humans-reason.pdf" target="_blank" rel="noopener">Mercier &amp; Sperber (2011) — Why do humans reason?</a></li>
+          <li><a href="https://journals.sagepub.com/doi/10.1177/0963721413480174" target="_blank" rel="noopener">Stanovich, West &amp; Toplak (2013) — Myside bias</a></li>
+          <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9966223/" target="_blank" rel="noopener">On actively open-minded thinking (2023)</a></li>
+        </ul>
+      </div>
+      <div class="src-col">
+        <h4>Debias &amp; application</h4>
+        <ul>
+          <li><a href="https://www.pnas.org/doi/10.1073/pnas.1912440117" target="_blank" rel="noopener">Wood &amp; Porter (2019) — Backfire effect reconsidered</a></li>
+          <li><a href="https://www.adb.org/sites/default/files/publication/29658/premortem-technique.pdf" target="_blank" rel="noopener">Klein — The pre-mortem technique</a></li>
+          <li><a href="https://www.jaad.org/article/S0190-9622(19)32285-6/fulltext" target="_blank" rel="noopener">Confirmation bias in diagnostic error</a></li>
+          <li><a href="https://www.tandfonline.com/doi/full/10.1080/13546783.2021.1891967" target="_blank" rel="noopener">Search, interpretation &amp; memory — recent review</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="colophon">
+        Built as a reading-style field guide. Typography:
+        Fraunces &amp; Inter. All claims are sourced above; any remaining
+        errors are the author's alone — and, most likely, a small monument
+        to the very bias this page describes.
+      </div>
+      <div>© <span id="year"></span> · A field guide.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+/* Year */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Nav scrolled state */
+const nav = document.getElementById('topnav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* Scroll reveal */
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* Wason 2-4-6 demo */
+(function() {
+  const form = document.getElementById('demoForm');
+  const a = document.getElementById('a');
+  const b = document.getElementById('b');
+  const c = document.getElementById('c');
+  const log = document.getElementById('log');
+  const helper = document.getElementById('helper');
+  const stats = document.getElementById('stats');
+  const revealBtn = document.getElementById('revealBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const revealBox = document.getElementById('revealBox');
+
+  // Rule: strictly ascending
+  const rule = (x, y, z) => x < y && y < z;
+
+  let tests = 0, yeses = 0, nos = 0, everTriedDisconfirm = false;
+
+  function updateStats() {
+    if (tests === 0) { stats.textContent = ''; return; }
+    stats.textContent = `${tests} test${tests===1?'':'s'} · ${yeses} yes · ${nos} no`;
+  }
+
+  function addRow(x, y, z, ok) {
+    const row = document.createElement('div');
+    row.className = 'log-row ' + (ok ? 'yes' : 'no');
+    row.innerHTML = `<span class="triple">${x}, ${y}, ${z}</span><span class="verdict">${ok ? 'Yes — fits' : 'No — doesn\'t fit'}</span>`;
+    log.prepend(row);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const x = parseInt(a.value, 10), y = parseInt(b.value, 10), z = parseInt(c.value, 10);
+    if ([x, y, z].some(n => Number.isNaN(n))) {
+      helper.textContent = 'Please enter three whole numbers.';
+      helper.style.color = '#FF9E9E';
+      return;
+    }
+    helper.style.color = '';
+    helper.textContent = 'Enter three whole numbers.';
+
+    const ok = rule(x, y, z);
+    tests++;
+    if (ok) yeses++; else nos++;
+    if (!ok) everTriedDisconfirm = true;
+    // They also "tried to disconfirm" if they picked something unusual — we don't infer intent, just count
+    addRow(x, y, z, ok);
+    updateStats();
+    a.value = b.value = c.value = '';
+    a.focus();
+  });
+
+  revealBtn.addEventListener('click', () => {
+    revealBox.classList.add('show');
+    // Adaptive epilogue based on how they behaved
+    const explain = revealBox.querySelector('.explain');
+    if (tests === 0) {
+      explain.innerHTML = `Not a single test? That's the most honest result of all — the brain preferred a guess to an experiment. Try a few triples before revealing.`;
+    } else if (nos === 0) {
+      explain.innerHTML = `You tested ${tests} triple${tests===1?'':'s'} and got <em>yes</em> every time. That feels like proof — and that feeling is confirmation bias doing its work. To actually find the rule you needed a triple you expected to fail. (For example: <em>1, 2, 99</em> or <em>7, 7, 8</em> — the second breaks the ascending-strict rule, the first confirms it.)`;
+    } else if (nos > 0 && yeses > 0) {
+      explain.innerHTML = `You tested both confirming <em>and</em> disconfirming cases — ${yeses} yes, ${nos} no. That's exactly the strategy Wason was looking for. Most of his 1960 subjects never got there. Nice work.`;
+    }
+    revealBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    log.innerHTML = '';
+    tests = yeses = nos = 0;
+    everTriedDisconfirm = false;
+    updateStats();
+    revealBox.classList.remove('show');
+    a.value = b.value = c.value = '';
+    a.focus();
+  });
+})();
+</script>
+
+</body>
+</html>
