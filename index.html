@@ -125,7 +125,44 @@ nav.top ul a::after {
   transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease);
 }
 nav.top ul a:hover::after { transform: scaleX(1); }
-@media (max-width: 760px) { nav.top ul { display: none; } }
+
+.nav-toggle {
+  display: none;
+  width: 44px; height: 44px;
+  align-items: center; justify-content: center;
+  border: 1px solid var(--black); border-radius: 10px;
+  background: var(--white);
+}
+.nav-toggle span {
+  display: block; width: 18px; height: 2px; background: var(--black); position: relative;
+}
+.nav-toggle span::before, .nav-toggle span::after {
+  content: ""; position: absolute; left: 0; width: 18px; height: 2px; background: var(--black);
+  transition: transform 0.25s var(--ease), top 0.25s var(--ease);
+}
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+nav.top.open .nav-toggle span { background: transparent; }
+nav.top.open .nav-toggle span::before { top: 0; transform: rotate(45deg); }
+nav.top.open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
+
+@media (max-width: 760px) {
+  .nav-toggle { display: inline-flex; }
+  nav.top ul {
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; gap: 0;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(18px) saturate(1.5);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    border-bottom: 1px solid var(--grey-200);
+    padding: 8px var(--gutter) 16px;
+    display: none;
+  }
+  nav.top.open ul { display: flex; }
+  nav.top ul li { border-top: 1px solid var(--grey-200); }
+  nav.top ul a { display: block; padding: 14px 0; font-size: 13px; }
+  nav.top ul a::after { display: none; }
+}
 
 /* ————————————————————————————————————————————————————————————
    HERO
@@ -383,8 +420,12 @@ nav.top ul a:hover::after { transform: scaleX(1); }
   align-items: stretch;
 }
 @media (max-width: 640px) {
-  .demo-input-row { grid-template-columns: 1fr 1fr 1fr; }
-  .demo-input-row .test-btn { grid-column: 1 / -1; }
+  .demo-input-row { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .demo-input-row .test-btn { grid-column: 1 / -1; padding: 16px 24px; }
+  .demo-input-row input { padding: 14px 8px; font-size: 24px; }
+  .demo-card { box-shadow: 8px 8px 0 var(--blue-ink); border-radius: 18px; }
+  .seed-triple { gap: 10px; }
+  .seed-triple .n { width: 58px; height: 58px; font-size: 28px; box-shadow: 3px 3px 0 var(--blue-electric); }
 }
 .demo-input-row input {
   width: 100%;
@@ -844,6 +885,7 @@ footer.site h2 em { font-style: italic; color: var(--yellow); font-weight: 300; 
     <li><a href="#why">Why</a></li>
     <li><a href="#resist">Resist</a></li>
   </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
 </nav>
 
 <!-- ================= HERO ================= -->
@@ -1980,6 +2022,20 @@ const nav = document.getElementById('topnav');
 const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
+
+/* Mobile nav toggle */
+const navToggle = document.getElementById('navToggle');
+const navList = nav.querySelector('ul');
+navToggle.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+navList.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A') {
+    nav.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+});
 
 /* Scroll reveal */
 const io = new IntersectionObserver((entries) => {
